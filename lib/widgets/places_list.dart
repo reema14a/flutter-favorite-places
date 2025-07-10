@@ -1,91 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_fav_places/providers/places_provider.dart';
-import 'package:flutter_fav_places/widgets/new_place.dart';
-import 'package:flutter_fav_places/widgets/place_details.dart';
+import 'package:flutter_fav_places/screens/place_details.dart';
+import 'package:flutter_fav_places/models/place.dart';
 
 class PlacesList extends ConsumerWidget {
-  const PlacesList({super.key});
+  const PlacesList({super.key, required this.places});
+  final List<Place> places;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
-
-    Widget mainContent = const Center(
-      child: Text(
-        'No places found. Start adding some!',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
-      ),
-    );
-
-    if (places.isNotEmpty) {
-      mainContent = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: places.length,
-              itemBuilder: (ctx, index) => Dismissible(
-                key: ValueKey(places[index].id),
-                background: Container(
-                  color: Theme.of(context).colorScheme.error,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 15,
-                  ),
-                ),
-                onDismissed: (direction) {
-                  ref
-                      .read(placesProvider.notifier)
-                      .deletePlace(places[index].id);
-
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Deleted place'),
-                      duration: Duration(seconds: 3),
-                    ),
-                  );
-                },
-                child: ListTile(
-                  title: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (ctx) =>
-                              PlaceDetails(placeId: places[index].id),
-                        ),
-                      );
-                    },
-                    child: Text(places[index].title),
-                  ),
-                ),
-              ),
-            ),
+    if (places.isEmpty) {
+      return Center(
+        child: Text(
+          'No places found. Start adding some!',
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
           ),
-        ],
+        ),
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Great Places'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const NewPlace(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.add),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+
+      itemCount: places.length,
+      itemBuilder: (ctx, index) => Dismissible(
+        key: ValueKey(places[index].id),
+        background: Container(
+          color: Theme.of(context).colorScheme.error,
+          margin: EdgeInsets.symmetric(
+            horizontal: 15,
           ),
-        ],
+        ),
+        onDismissed: (direction) {
+          ref.read(placesProvider.notifier).deletePlace(places[index].id);
+
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Deleted place'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        },
+        child: ListTile(
+          title: Text(
+            places[index].title,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (ctx) => PlaceDetailsScreen(place: places[index]),
+              ),
+            );
+          },
+        ),
       ),
-      body: mainContent,
     );
   }
 }

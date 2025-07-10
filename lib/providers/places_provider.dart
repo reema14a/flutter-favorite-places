@@ -2,16 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_fav_places/models/place.dart';
 
 class PlacesNotifier extends StateNotifier<List<Place>> {
-  PlacesNotifier() : super([]);
+  PlacesNotifier() : super(const []);
 
   void addPlace(String title) {
-    final newPlace = Place(DateTime.now().toString(), title);
+    final newPlace = Place(title);
     state = [...state, newPlace];
-  }
-
-  Place getPlace(String placeId) {
-    final place = state.firstWhere((place) => place.id == placeId);
-    return place;
   }
 
   void deletePlace(String placeId) {
