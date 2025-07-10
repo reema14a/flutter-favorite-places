@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 import 'dart:io';
+import '../config/api_keys.dart';
 
 const uuid = Uuid();
 
@@ -31,6 +32,6 @@ class PlaceLocation {
     final lat = latitude;
     final lng = longitude;
 
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C$lat,$lng&key=AIzaSyDklLIV7vU9K_MGsZPDZE9UVabse8Pcq14';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C$lat,$lng&key=${ApiKeys.googleMapsApiKey}';
   }
 }

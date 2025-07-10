@@ -1,0 +1,6 @@
+class ApiKeys {
+  // Replace this with your actual API key
+  // In production, this should be loaded from environment variables
+  // or a secure configuration service
+  static const String googleMapsApiKey = 'YOUR_GOOGLE_MAPS_API_KEY_HERE';
+} 

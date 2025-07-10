@@ -1,0 +1,5 @@
+import Foundation
+
+struct GoogleMapsConfig {
+    static let apiKey = "YOUR_GOOGLE_MAPS_API_KEY_HERE"
+} 

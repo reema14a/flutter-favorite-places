@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_fav_places/models/place.dart';
 import 'package:flutter_fav_places/screens/map.dart';
+import '../config/api_keys.dart';
 
 class LocationInput extends StatefulWidget {
   final Function(PlaceLocation) onSelectLocation;
@@ -22,7 +23,7 @@ class _LocationInputState extends State<LocationInput> {
 
   void _savePlace(double latitude, double longitude) async {
     final url =
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=AIzaSyDklLIV7vU9K_MGsZPDZE9UVabse8Pcq14';
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=${ApiKeys.googleMapsApiKey}';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode != 200) {
